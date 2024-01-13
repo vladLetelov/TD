@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class MovementPath : MonoBehaviour
 {
     public enum PathTypes
@@ -10,10 +9,11 @@ public class MovementPath : MonoBehaviour
         linear,
         loop
     }
-    public PathTypes PathType;
     public int movementDirection = 1;
     public int MoveingTo = 0;
     public Transform[] PathElements;
+    public PathTypes PathType;
+
 
 
     public void OnDrawGizmos()
@@ -63,6 +63,7 @@ public class MovementPath : MonoBehaviour
                     movementDirection = -1;
                 }
             }
+
             MoveingTo = MoveingTo + movementDirection;
 
             if (PathType == PathTypes.loop)
@@ -76,11 +77,32 @@ public class MovementPath : MonoBehaviour
                     MoveingTo = PathElements.Length - 1;
                 }
             }
-            // Проверяем, является ли текущая точка последней
+
             if (MoveingTo == PathElements.Length - 1)
             {
-                Destroy(MovingObject); // Удаляем объект
+                Destroy(MovingObject);
             }
         }
+    }
+
+    public IEnumerator<Transform> GetClosestPathPoint(Vector3 currentPosition)
+    {
+        if (PathElements == null || PathElements.Length < 1)
+            yield break;
+
+        var closestPoint = PathElements[0];
+        var minDistance = Vector3.Distance(currentPosition, closestPoint.position);
+
+        for (int i = 1; i < PathElements.Length; i++)
+        {
+            var distance = Vector3.Distance(currentPosition, PathElements[i].position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestPoint = PathElements[i];
+            }
+        }
+
+        yield return closestPoint;
     }
 }

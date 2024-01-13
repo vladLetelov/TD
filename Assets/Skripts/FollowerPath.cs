@@ -66,9 +66,5 @@ public class FollowerPath : MonoBehaviour
                 pointInPath = null;
             }
         }
-
-
-
-
     }
 }
