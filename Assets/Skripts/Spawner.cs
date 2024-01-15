@@ -4,26 +4,30 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    public GameObject obj;
-    private float randomX;
-    Vector2 whereToSpawn;
-    public float spawnDelay;
-    float nextSpawn = 0.0f;
+    public GameObject enemyPrefab;
+    public int maxEnemy = 5;
 
-    void Start()
+    public float timeSpawn = 2f;
+    private float timer;
+
+    public float distance = 3;
+
+    private void Start()
     {
-        
+        timer = timeSpawn;
     }
 
-    void Update()
+    private void Update()
     {
-        if(Time.time > nextSpawn)
+        timer -= Time.deltaTime;
+        if (timer <= 0)
         {
-            nextSpawn = Time.time + spawnDelay;
-            randomX = Random.Range(-8, 8);
-            whereToSpawn = new Vector2(220, 140); // Враги будут спавниться в точке (0, 0)
-            GameObject Enemy = Instantiate(obj, whereToSpawn, Quaternion.identity);
-            Destroy(Enemy, 1.7f);
+            timer = timeSpawn;
+            if (transform.childCount < maxEnemy)
+            {
+                GameObject spawnedEnemy = Instantiate(enemyPrefab, new Vector3(-110, 10, 90), Quaternion.identity, transform);
+                spawnedEnemy.transform.rotation = Quaternion.Euler(0, 180, 0); // Rotate the enemy object
+            }
         }
     }
 }
