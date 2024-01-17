@@ -7,19 +7,29 @@ public class HealthBar : MonoBehaviour
 {
     public Slider slider;
     public Health playerHealth;
-    public Transform playerTransform; // ƒобавл€ем Transform игрока
-    public Vector3 offset; // ƒобавл€ем смещение полоски здоровь€ относительно игрока
+    public Transform playerTransform;
+    public Vector3 offset;
 
     private void Start()
     {
         SetMaxHealth(playerHealth.maxHealth);
-        transform.position = playerTransform.position + offset; // »нициализируем положение полоски здоровь€
+        transform.position = playerTransform.position + offset;
     }
 
     private void Update()
     {
         SetHealth(playerHealth.health);
-        transform.position = playerTransform.position + offset; // ќбновл€ем положение полоски здоровь€
+        transform.position = playerTransform.position + offset;
+
+        if (playerHealth.health <= 0)
+        {
+            Destroy(gameObject);
+        }
+
+        if (playerTransform.GetComponent<Movement>().currentWaypointIndex == playerTransform.GetComponent<Movement>().waypoints.Length)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void SetMaxHealth(int health)

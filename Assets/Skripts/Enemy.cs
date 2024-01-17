@@ -7,7 +7,7 @@ public class Movement : MonoBehaviour
     public Transform[] waypoints;
     public float speed = 5f;
 
-    private int currentWaypointIndex = 0;
+    public int currentWaypointIndex = 0;
 
     private void Update()
     {
