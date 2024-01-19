@@ -13,20 +13,26 @@ public class HealthBar : MonoBehaviour
     private void Start()
     {
         SetMaxHealth(playerHealth.maxHealth);
-        transform.position = playerTransform.position + offset;
+        if (playerTransform != null)
+        {
+            transform.position = playerTransform.position + offset;
+        }
     }
 
     private void Update()
     {
         SetHealth(playerHealth.health);
-        transform.position = playerTransform.position + offset;
+        if (playerTransform != null)
+        {
+            transform.position = playerTransform.position + offset;
+        }
 
         if (playerHealth.health <= 0)
         {
             Destroy(gameObject);
         }
 
-        if (playerTransform.GetComponent<Movement>().currentWaypointIndex == playerTransform.GetComponent<Movement>().waypoints.Length)
+        if (playerTransform != null && playerTransform.GetComponent<Movement>().currentWaypointIndex == playerTransform.GetComponent<Movement>().waypoints.Length)
         {
             Destroy(gameObject);
         }
@@ -41,5 +47,17 @@ public class HealthBar : MonoBehaviour
     public void SetHealth(int health)
     {
         slider.value = health;
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (playerTransform != null)
+        {
+            Destroy(gameObject);
+        }
     }
 }

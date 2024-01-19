@@ -50,18 +50,18 @@ public class Spawner : MonoBehaviour
         {
             Wave wave = waves[currentWave - 1]; // Получаем текущую волну по индексу текущей волны - 1
             SpawnWave(wave); // Запускаем спаун для текущей волны
-            Debug.Log("Текущая волна: " + (currentWave - 1));
         }
 
         currentWave++; // Увеличиваем номер текущей волны
 
 
-        if (currentWave -1 == waves.Count + 1)
+        if (currentWave - 1 == waves.Count + 1)
         {
             currentWave += 1; // Если текущая волна превышает общее количество волн, сбрасываем номер текущей волны на 1
         }
 
     }
+
 
     private void SpawnWave(Wave wave)
     {
@@ -75,13 +75,13 @@ public class Spawner : MonoBehaviour
             SpawnEnemy(enemyDistance);
             yield return new WaitForSeconds(delay); // Добавляем задержку между спавном элементов
         }
-    }
+    }   
 
     public float delay = 2f; // Замените 2f на желаемую задержку
 
     private void SpawnEnemy(float enemyDistance = 0f)
     {
-        GameObject spawnedEnemy = Instantiate(enemyPrefab, new Vector3(-110, 10, 90), Quaternion.identity, transform);
+        GameObject spawnedEnemy = Instantiate(enemyPrefab, new Vector3(-27, 135, 92), Quaternion.identity, transform);
         spawnedEnemy.transform.rotation = Quaternion.Euler(0, 180, 0);
 
         GameObject healthBar = Instantiate(healthBarPrefab);

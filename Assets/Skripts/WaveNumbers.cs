@@ -15,11 +15,22 @@ public class WaveNumbers : MonoBehaviour
 
     private void Update()
     {
+        if (spawner == null)
+        {
+            return;
+        }
+
+        if (spawner.waves == null)
+        {
+            return;
+        }
+
         if (spawner.currentWave >= 0 && spawner.currentWave <= spawner.waves.Count)
         {
             UpdateWaveText();
         }
     }
+
 
     private void UpdateWaveText()
     {

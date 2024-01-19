@@ -7,11 +7,10 @@ public class Health : MonoBehaviour
     public int health;
     public int maxHealth;
 
-
-    void TakeHit(int damage)
+    public void TakeHit(int damage)
     {
         health -= damage;
-        if(health <= 0)
+        if (health <= 0)
         {
             Destroy(gameObject);
         }
