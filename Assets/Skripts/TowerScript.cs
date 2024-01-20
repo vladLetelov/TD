@@ -9,6 +9,9 @@ public class TowerScript : MonoBehaviour
     public float fireRate = 1f;
     private float fireCountdown = 0f;
 
+    // дополнительные переменные для башни
+    public bool isBuilt = false; // булевая переменная, чтобы проверить, построена ли башня
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
@@ -17,28 +20,31 @@ public class TowerScript : MonoBehaviour
 
     void Update()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        GameObject closestEnemy = null;
-        float closestDistance = Mathf.Infinity;
-
-        foreach (GameObject enemy in enemies)
+        if (isBuilt) // только если башня построена, она может стрелять
         {
-            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            GameObject closestEnemy = null;
+            float closestDistance = Mathf.Infinity;
 
-            if (distance <= range && distance < closestDistance)
+            foreach (GameObject enemy in enemies)
             {
-                closestEnemy = enemy;
-                closestDistance = distance;
+                float distance = Vector3.Distance(transform.position, enemy.transform.position);
+
+                if (distance <= range && distance < closestDistance)
+                {
+                    closestEnemy = enemy;
+                    closestDistance = distance;
+                }
             }
-        }
 
-        if (closestEnemy != null && fireCountdown <= 0f)
-        {
-            Shoot(closestEnemy);
-            fireCountdown = 1f / fireRate;
-        }
+            if (closestEnemy != null && fireCountdown <= 0f)
+            {
+                Shoot(closestEnemy);
+                fireCountdown = 1f / fireRate;
+            }
 
-        fireCountdown -= Time.deltaTime;
+            fireCountdown -= Time.deltaTime;
+        }
     }
 
     void Shoot(GameObject target)
@@ -55,5 +61,21 @@ public class TowerScript : MonoBehaviour
         {
             bullet.Seek(target);
         }
+    }
+
+    // перемещает башню в указанную позицию
+    public void MoveTo(Vector3 newPosition)
+    {
+        if (!isBuilt) // если башня еще не построена, она может перемещаться
+        {
+            transform.position = newPosition;
+        }
+    }
+
+    // размещает башню в указанную позицию и делает её неподвижной
+    public void PlaceTower(Vector3 position)
+    {
+        transform.position = position;
+        isBuilt = true;
     }
 }
