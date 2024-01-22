@@ -7,32 +7,29 @@ public class Build : MonoBehaviour
     public TowerScript currentTower;
     public GameObject TowerPrefab;
     public List<GameObject> buildSpots;
-    public bool isBuilding = false; // Сделано общедоступным
-    private bool hasBuiltTower = false;
+    public bool isBuilding = false;
+#pragma warning disable 414
+    public bool hasBuiltTower;
+#pragma warning restore 414
+    public CoinCounter coinCounter;
 
     public void OnButtonClick()
     {
-        if (hasBuiltTower) // Если уже построена башня
+        if (!isBuilding)
         {
-            Destroy(currentTower.gameObject); // Удаляем текущую башню
-            currentTower = null; // Обнуляем ссылку на башню
-            hasBuiltTower = false; // Сбрасываем флаг построенной башни
+            Vector3 mousePosition = GetMousePosition();
+            currentTower = Instantiate(TowerPrefab, mousePosition, Quaternion.identity).GetComponent<TowerScript>();
+            currentTower.MoveTo(mousePosition);
+            isBuilding = true;
         }
         else
         {
-            if (!isBuilding) // Если не находимся в режиме строительства
-            {
-                isBuilding = true;
-                Vector3 mousePosition = GetMousePosition();
-                currentTower = Instantiate(TowerPrefab, mousePosition, Quaternion.identity).GetComponent<TowerScript>();
-                currentTower.MoveTo(mousePosition);
-            }
-            else // Если уже находимся в режиме строительства
-            {
-                isBuilding = false; // Выключаем режим строительства
-            }
+            isBuilding = false;
+            Destroy(currentTower.gameObject);
+            currentTower = null;
         }
     }
+
 
     void Update()
     {
@@ -42,24 +39,27 @@ public class Build : MonoBehaviour
             currentTower.MoveTo(mousePosition);
         }
 
-        if (Input.GetMouseButtonDown(0) && isBuilding) // Если нажата левая кнопка мыши и находимся в режиме строительства
+        if (Input.GetMouseButtonDown(0) && isBuilding)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit)) // Если луч пересекает что-то
+            if (Physics.Raycast(ray, out hit))
             {
-                if (buildSpots.Contains(hit.collider.gameObject)) // Если это объект под башню
+                if (buildSpots.Contains(hit.collider.gameObject))
                 {
                     currentTower.PlaceTower(hit.transform.position);
-                    hasBuiltTower = true; // Устанавливаем флаг построенной башни в true
+                    hasBuiltTower = true;
+                    isBuilding = false;
+                    currentTower = null;
                 }
             }
-            else // Если луч не пересекает объект под башню
+            else
             {
-                Destroy(currentTower.gameObject); // Удаляем текущую башню
-                currentTower = null; // Обнуляем ссылку на башню
+                Destroy(currentTower.gameObject);
+                currentTower = null;
+                hasBuiltTower = false;
+                isBuilding = false;
             }
-            isBuilding = false; // Сбрасываем флаг режима строительства в false после каждого нажатия мыши
         }
     }
 
@@ -71,4 +71,3 @@ public class Build : MonoBehaviour
         return worldPosition;
     }
 }
-

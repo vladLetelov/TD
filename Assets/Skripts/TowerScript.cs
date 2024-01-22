@@ -2,12 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TowerType
+{
+    Type1,
+    Type2
+}
+
 public class TowerScript : MonoBehaviour
 {
     public GameObject bulletPrefab;
     public float range = 5f;
     public float fireRate = 1f;
     private float fireCountdown = 0f;
+    public TowerType towerType;
+    public int towerPrice = 100; // Цена за башню
 
     // дополнительные переменные для башни
     public bool isBuilt = false; // булевая переменная, чтобы проверить, построена ли башня
