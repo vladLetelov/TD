@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum TowerType
 {
@@ -19,6 +20,13 @@ public class TowerScript : MonoBehaviour
 
     // дополнительные переменные для башни
     public bool isBuilt = false; // булевая переменная, чтобы проверить, построена ли башня
+
+    private CoinCounter coinCounter; // ссылка на скрипт отвечающий за монеты игрока
+
+    void Start()
+    {
+        coinCounter = FindObjectOfType<CoinCounter>(); // Найдите объект CoinCounter в сцене
+    }
 
     void OnDrawGizmosSelected()
     {
@@ -86,4 +94,21 @@ public class TowerScript : MonoBehaviour
         transform.position = position;
         isBuilt = true;
     }
+
+    void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(1) && isBuilt)
+        {
+            if (towerType == TowerType.Type1)
+            {
+                coinCounter.AddCoins(50);
+            }
+            else if (towerType == TowerType.Type2)
+            {
+                coinCounter.AddCoins(100);
+            }
+            Destroy(gameObject); // Удаляем объект башни
+        }
+    }
+
 }

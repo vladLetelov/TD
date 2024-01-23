@@ -7,7 +7,9 @@ public class Movement : MonoBehaviour
     public Transform[] waypoints;
     public float speed = 5f;
     public int currentWaypointIndex = 0;
+    public int damage = 10; // Новое поле для установки урона
     private CoinCounter counter; // Добавьте ссылку на CoinCounter
+    private Health health; // Добавьте ссылку на Health вместо BuildingScript
 
     private void Start()
     {
@@ -20,6 +22,17 @@ public class Movement : MonoBehaviour
         else
         {
             Debug.LogWarning("Не удалось найти объект с тегом 'CoinText'.");
+        }
+
+        // Найдем объект Health на сцене
+        GameObject healthObject = GameObject.FindWithTag("Base");
+        if (healthObject != null)
+        {
+            health = healthObject.GetComponent<Health>();
+        }
+        else
+        {
+            Debug.LogWarning("Не удалось найти объект с тегом 'Base'.");
         }
     }
 
@@ -42,6 +55,12 @@ public class Movement : MonoBehaviour
                     {
                         counter.AddCoins(5); // Увеличиваем количество монет перед уничтожением объекта
                     }
+
+                    if (health != null)
+                    {
+                        health.TakeHit(damage); // Уменьшаем здоровье
+                    }
+
                     Destroy(gameObject);
                 }
             }

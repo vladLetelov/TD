@@ -10,6 +10,16 @@ public class CoinCounter : MonoBehaviour
     void Start()
     {
         UpdateCoinText();
+        StartCoroutine(AddCoinsOverTime()); // Запускаем корутину
+    }
+
+    IEnumerator AddCoinsOverTime() // Корутина для добавления монет каждые 10 секунд
+    {
+        while (true) // Бесконечный цикл
+        {
+            yield return new WaitForSeconds(10); // Ждем 10 секунд
+            AddCoins(10); // Добавляем 10 монет
+        }
     }
 
     public void AddCoins(int amount)

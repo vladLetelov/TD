@@ -6,7 +6,6 @@ public class BuildSpot : MonoBehaviour
     public GameObject TowerPrefab;
     public bool isButtonClicked = false;
     public bool isBuilding = false; // Переменная для отслеживания движения башни.
-    public GameObject BuildSpotPrefab;
 
     private void OnMouseDown()
     {
@@ -18,7 +17,7 @@ public class BuildSpot : MonoBehaviour
             {
                 towerScript.isBuilt = true; // Устанавливаем значение "построено" в true при создании башни
             }
-            Destroy(gameObject);
+
             isButtonClicked = false;
 
             // Вычитаем монеты только после успешного размещения башни
@@ -27,48 +26,12 @@ public class BuildSpot : MonoBehaviour
         }
     }
 
-    private void OnMouseRightClick()
-    {
-        Destroy(gameObject);
-        Instantiate(BuildSpotPrefab, transform.position, Quaternion.identity);
-    }
-
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+        // Установите isBuilding равным значению переменной isBuilding в скрипте Build.
+        isBuilding = buildScript.isBuilding;
 
-            if (Physics.Raycast(ray, out hit, 100.0f))
-            {
-                if (hit.transform == this.transform)
-                {
-                    OnMouseRightClick();
-                }
-            }
-        }
-
-        // Если башня существует и движется, установить isBuilding в true.
-        // Если башня удалена, установить isBuilding в false.
-        isBuilding = buildScript.currentTower != null && buildScript.isBuilding;
-
-        // Установить isButtonClicked равным isBuilding
+        // Установите isButtonClicked в true, если isBuilding равно true. В противном случае, установите значение isButtonClicked в false.
         isButtonClicked = isBuilding;
-
-        // Проверка, что ПКМ было нажато на башню
-        if (Input.GetMouseButtonDown(1))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, 100.0f))
-            {
-                if (hit.transform == this.transform)
-                {
-                    Debug.Log("Right-clicked on tower");
-                }
-            }
-        }
     }
 }

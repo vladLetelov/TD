@@ -6,12 +6,13 @@ public class Build : MonoBehaviour
 {
     public TowerScript currentTower;
     public GameObject TowerPrefab;
-    public List<GameObject> buildSpots;
     public bool isBuilding = false;
-#pragma warning disable 414
-    public bool hasBuiltTower;
-#pragma warning restore 414
-    public CoinCounter coinCounter;
+    public CoinCounter coinCounter; // Добавьте переменную coinCounter
+
+    void Start()
+    {
+        coinCounter = FindObjectOfType<CoinCounter>(); // Найдите объект CoinCounter в сцене
+    }
 
     public void OnButtonClick()
     {
@@ -30,7 +31,6 @@ public class Build : MonoBehaviour
         }
     }
 
-
     void Update()
     {
         if (isBuilding)
@@ -45,19 +45,33 @@ public class Build : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                if (buildSpots.Contains(hit.collider.gameObject))
+                if (hit.collider.CompareTag("Spot"))
                 {
                     currentTower.PlaceTower(hit.transform.position);
-                    hasBuiltTower = true;
                     isBuilding = false;
                     currentTower = null;
+
+                    // Используйте переменную coinCounter для изменения количества монет
+                    if (currentTower.towerType == TowerType.Type1)
+                    {
+                        coinCounter.AddCoins(50);
+                    }
+                    else if (currentTower.towerType == TowerType.Type2)
+                    {
+                        coinCounter.AddCoins(100);
+                    }
+                }
+                else
+                {
+                    Destroy(currentTower.gameObject);
+                    currentTower = null;
+                    isBuilding = false;
                 }
             }
             else
             {
                 Destroy(currentTower.gameObject);
                 currentTower = null;
-                hasBuiltTower = false;
                 isBuilding = false;
             }
         }
@@ -71,3 +85,4 @@ public class Build : MonoBehaviour
         return worldPosition;
     }
 }
+
