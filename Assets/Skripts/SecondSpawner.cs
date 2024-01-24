@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
+public class SecondSpawner : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public GameObject healthBarPrefab;
@@ -16,20 +16,27 @@ public class Spawner : MonoBehaviour
 
     public List<Wave> waves = new List<Wave>();
 
-    public int currentWave = 1; // Добавляем переменную для хранения номера текущей волны
-    public SecondSpawner secondSpawner;
+    public int currentWave = 1;
+
+    public Spawner firstSpawner;
+
+    public bool isActive = false;  // Добавлено
+
     private void Start()
     {
         timer = timeSpawn;
+        isActive = false; // Добавлено
     }
 
     private void Update()
     {
-        if (currentWave > 10) // Добавьте это условие
+        if (currentWave > 6) // Добавьте это условие
         {
             this.enabled = false; // Отключаем компонент Spawner
             return; // Выходим из метода Update
         }
+        if (!isActive) return;  // Добавлено
+
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
@@ -40,17 +47,12 @@ public class Spawner : MonoBehaviour
             }
         }
 
-        if (currentWave <= waves.Count) // Проверяем, что текущая волна не превышает общее количество волн
+        if (currentWave <= waves.Count)
         {
-            if (transform.childCount == 0) // Проверяем, что все враги предыдущей волны были уничтожены
+            if (transform.childCount == 0)
             {
-                StartNextWave(); // Запускаем следующую волну
+                StartNextWave();
             }
-        }
-        if (currentWave > 4)
-        {
-            // Активируйте второй спавнер
-            secondSpawner.isActive = true;
         }
     }
 
@@ -58,20 +60,17 @@ public class Spawner : MonoBehaviour
     {
         if (currentWave <= waves.Count)
         {
-            Wave wave = waves[currentWave - 1]; // Получаем текущую волну по индексу текущей волны - 1
-            SpawnWave(wave); // Запускаем спаун для текущей волны
+            Wave wave = waves[currentWave - 1];
+            SpawnWave(wave);
         }
 
-        currentWave++; // Увеличиваем номер текущей волны
-
+        currentWave++;
 
         if (currentWave - 1 == waves.Count + 1)
         {
-            currentWave += 1; // Если текущая волна превышает общее количество волн, сбрасываем номер текущей волны на 1
+            currentWave += 1;
         }
-
     }
-
 
     private void SpawnWave(Wave wave)
     {
@@ -83,11 +82,11 @@ public class Spawner : MonoBehaviour
         for (int i = 0; i < enemyCount; i++)
         {
             SpawnEnemy(enemyDistance);
-            yield return new WaitForSeconds(delay); // Добавляем задержку между спавном элементов
+            yield return new WaitForSeconds(delay);
         }
-    }   
+    }
 
-    public float delay = 2f; // Замените 2f на желаемую задержку
+    public float delay = 2f;
 
     private void SpawnEnemy(float enemyDistance = 0f)
     {
@@ -106,4 +105,3 @@ public class Spawner : MonoBehaviour
         spawnedEnemy.transform.position += new Vector3(0, 0, enemyDistance);
     }
 }
-

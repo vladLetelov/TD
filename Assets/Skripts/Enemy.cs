@@ -10,6 +10,7 @@ public class Movement : MonoBehaviour
     public int damage = 10; // Новое поле для установки урона
     private CoinCounter counter; // Добавьте ссылку на CoinCounter
     private Health health; // Добавьте ссылку на Health вместо BuildingScript
+    public int coinReward = 5;
 
     private void Start()
     {
@@ -53,7 +54,7 @@ public class Movement : MonoBehaviour
                 {
                     if (counter != null)
                     {
-                        counter.AddCoins(5); // Увеличиваем количество монет перед уничтожением объекта
+                        counter.AddCoins(coinReward); // Увеличиваем количество монет перед уничтожением объекта
                     }
 
                     if (health != null)
