@@ -5,6 +5,7 @@ using TMPro;
 
 public class WaveNumbers : MonoBehaviour
 {
+    public SecondSpawner secondSpawner;
     public Spawner spawner; // Ссылка на скрипт Spawner
     public TextMeshProUGUI waveText; // Ссылка на компонент TextMeshProUGUI для отображения номера волны
 
@@ -31,10 +32,37 @@ public class WaveNumbers : MonoBehaviour
         }
     }
 
-
     private void UpdateWaveText()
     {
-        waveText.text = "Волна: " + (spawner.currentWave - 1).ToString(); // Обновляем текст с номером волны
+        int enemyCount = 0; // Переменная для хранения количества врагов
+
+        if (spawner != null && spawner.waves != null)
+        {
+                if (spawner.currentWave >= 2 && spawner.currentWave < spawner.waves.Count + 1)
+                {
+                    if (spawner.currentWave < 4)
+                    {
+                        enemyCount = spawner.waves[spawner.currentWave - 2].enemyCount; // Получаем количество врагов из текущей волны первого спавнера
+                    }
+                    else
+                    {
+                        if (secondSpawner != null && secondSpawner.waves != null && secondSpawner.currentWave >= 2 && secondSpawner.currentWave < secondSpawner.waves.Count + 1)
+                        {
+                            enemyCount = spawner.waves[spawner.currentWave - 2].enemyCount + secondSpawner.waves[secondSpawner.currentWave - 2].enemyCount; // Получаем сумму количества врагов из текущей волны первого и второго спавнеров
+                        }
+                        else
+                        {
+                            enemyCount = spawner.waves[spawner.currentWave - 2].enemyCount; // Если второй спавнер не инициализирован или список волн пуст, используем только количество врагов из первого спавнера
+                        }
+                    }
+                }
+        }
+
+        waveText.text = "Волна: " + (spawner.currentWave - 1).ToString() + ", Враги: " + enemyCount.ToString(); // Обновляем текст с номером волны и количеством врагов
     }
+
+
+
+
 }
 

@@ -48,7 +48,7 @@ public class CoinCounter : MonoBehaviour
 
     public void AddCoinsDifferentMethod(int coinsToAdd)
     {
-        coinCount += coinsToAdd + 100;
+        coinCount += coinsToAdd;
 
         // Сохраняем общее количество монет
         PlayerPrefs.SetInt("TotalCoins", coinCount);
