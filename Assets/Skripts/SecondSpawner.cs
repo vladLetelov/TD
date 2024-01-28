@@ -90,7 +90,7 @@ public class SecondSpawner : MonoBehaviour
 
     private void SpawnEnemy(float enemyDistance = 0f)
     {
-        GameObject spawnedEnemy = Instantiate(enemyPrefab, new Vector3(-27, 135, 92), Quaternion.identity, transform);
+        GameObject spawnedEnemy = Instantiate(enemyPrefab, new Vector3(-14, 131, 92), Quaternion.identity, transform);
         spawnedEnemy.transform.rotation = Quaternion.Euler(0, 180, 0);
 
         GameObject healthBar = Instantiate(healthBarPrefab);

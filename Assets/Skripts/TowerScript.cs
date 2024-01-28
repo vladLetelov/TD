@@ -95,20 +95,24 @@ public class TowerScript : MonoBehaviour
         isBuilt = true;
     }
 
-    void OnMouseOver()
+void OnMouseOver()
+{
+    if (Input.GetMouseButtonDown(1) && isBuilt)
     {
-        if (Input.GetMouseButtonDown(1) && isBuilt)
+        if (towerType == TowerType.Type1)
         {
-            if (towerType == TowerType.Type1)
-            {
-                coinCounter.AddCoins(50);
-            }
-            else if (towerType == TowerType.Type2)
-            {
-                coinCounter.AddCoins(100);
-            }
+            coinCounter.AddCoins(50);
+        }
+        else if (towerType == TowerType.Type2)
+        {
+            coinCounter.AddCoins(100);
+        }
+
+        if (gameObject != null) // Проверяем, что объект все еще существует перед его удалением
+        {
             Destroy(gameObject); // Удаляем объект башни
         }
     }
+}
 
 }

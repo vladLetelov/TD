@@ -6,6 +6,7 @@ public class Spawner : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public GameObject healthBarPrefab;
+    public GameObject panel; // Добавляем поле для панели
     public int maxEnemy = 5;
     public Canvas canvas;
 
@@ -18,15 +19,18 @@ public class Spawner : MonoBehaviour
 
     public int currentWave = 1; // Добавляем переменную для хранения номера текущей волны
     public SecondSpawner secondSpawner;
+
     private void Start()
     {
         timer = timeSpawn;
+        panel.SetActive(false); // Делаем панель неактивной при старте
     }
 
     private void Update()
     {
-        if (currentWave > 10) // Добавьте это условие
+        if (currentWave > 10) // Добавляем условие для активации панели после 10-й волны
         {
+            panel.SetActive(true); // Активируем панель
             this.enabled = false; // Отключаем компонент Spawner
             return; // Выходим из метода Update
         }
@@ -85,13 +89,13 @@ public class Spawner : MonoBehaviour
             SpawnEnemy(enemyDistance);
             yield return new WaitForSeconds(delay); // Добавляем задержку между спавном элементов
         }
-    }   
+    }
 
     public float delay = 2f; // Замените 2f на желаемую задержку
 
     private void SpawnEnemy(float enemyDistance = 0f)
     {
-        GameObject spawnedEnemy = Instantiate(enemyPrefab, new Vector3(-27, 135, 92), Quaternion.identity, transform);
+        GameObject spawnedEnemy = Instantiate(enemyPrefab, new Vector3(-14, 131, 92), Quaternion.identity, transform);
         spawnedEnemy.transform.rotation = Quaternion.Euler(0, 180, 0);
 
         GameObject healthBar = Instantiate(healthBarPrefab);
@@ -106,4 +110,3 @@ public class Spawner : MonoBehaviour
         spawnedEnemy.transform.position += new Vector3(0, 0, enemyDistance);
     }
 }
-

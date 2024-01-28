@@ -9,7 +9,7 @@ public class BuildSpot : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (isButtonClicked && buildScript.coinCounter.coinCount >= (buildScript.currentTower.towerType == TowerType.Type1 ? 100 : 200))
+        if (isButtonClicked && !HasTower() && buildScript.coinCounter.coinCount >= (buildScript.currentTower.towerType == TowerType.Type1 ? 100 : 200))
         {
             GameObject tower = Instantiate(TowerPrefab, transform.position, Quaternion.identity);
             TowerScript towerScript = tower.GetComponent<TowerScript>();
@@ -24,6 +24,17 @@ public class BuildSpot : MonoBehaviour
             buildScript.coinCounter.coinCount -= buildScript.currentTower.towerType == TowerType.Type1 ? 100 : 200;
             buildScript.coinCounter.UpdateCoinText();
         }
+    }
+
+    private bool HasTower()
+    {
+        // ѕровер€ем, есть ли уже башн€ на данной позиции
+        GameObject existingTower = GameObject.FindGameObjectWithTag("Tower");
+        if (existingTower != null && existingTower.transform.position == transform.position)
+        {
+            return true;
+        }
+        return false;
     }
 
     private void Update()

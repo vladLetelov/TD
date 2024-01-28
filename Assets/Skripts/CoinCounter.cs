@@ -43,7 +43,7 @@ public class CoinCounter : MonoBehaviour
 
     public void UpdateCoinText()
     {
-        coinText.text = "Монеты: " + coinCount.ToString();
+        coinText.text = coinCount.ToString();
     }
 
     public void AddCoinsDifferentMethod(int coinsToAdd)
